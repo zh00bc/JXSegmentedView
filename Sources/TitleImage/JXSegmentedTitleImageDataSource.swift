@@ -35,6 +35,8 @@ open class JXSegmentedTitleImageDataSource: JXSegmentedTitleDataSource {
     open var isImageZoomEnabled: Bool = false
     /// 图片缩放选中时的scale
     open var imageSelectedZoomScale: CGFloat = 1.2
+    
+    open var buttonActions: [() -> Void] = []
 
     open override func preferredItemModelInstance() -> JXSegmentedBaseItemModel {
         return JXSegmentedTitleImageItemModel()

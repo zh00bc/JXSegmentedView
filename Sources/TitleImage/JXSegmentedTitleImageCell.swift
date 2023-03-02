@@ -10,7 +10,10 @@ import UIKit
 
 open class JXSegmentedTitleImageCell: JXSegmentedTitleCell {
     public let imageView = UIImageView()
+    public let imageButton = UIButton()
     private var currentImageInfo: String?
+    
+    var onTap: (() -> Void)?
 
     open override func prepareForReuse() {
         super.prepareForReuse()
@@ -23,6 +26,14 @@ open class JXSegmentedTitleImageCell: JXSegmentedTitleCell {
 
         imageView.contentMode = .scaleAspectFit
         contentView.addSubview(imageView)
+        contentView.addSubview(imageButton)
+        
+        imageButton.addTarget(self, action: #selector(onTap(button:)), for: .touchUpInside)
+
+    }
+    
+    @objc func onTap(button: UIButton) {
+        onTap?()
     }
 
     open override func layoutSubviews() {
@@ -50,6 +61,8 @@ open class JXSegmentedTitleImageCell: JXSegmentedTitleCell {
                 let contentWidth = imageSize.width + myItemModel.titleImageSpacing + titleLabel.bounds.size.width
                 titleLabel.center = CGPoint(x: (contentView.bounds.size.width - contentWidth)/2 + titleLabel.bounds.size.width/2, y: contentView.bounds.size.height/2)
                 imageView.center = CGPoint(x: titleLabel.frame.maxX + myItemModel.titleImageSpacing + imageSize.width/2, y: contentView.bounds.size.height/2)
+            imageButton.center = imageView.center
+            imageButton.bounds.size = CGSize(width: 40, height: 40)
             case .onlyImage:
                 imageView.center = CGPoint(x: contentView.bounds.size.width/2, y: contentView.bounds.size.height/2)
             case .onlyTitle:
@@ -73,6 +86,7 @@ open class JXSegmentedTitleImageCell: JXSegmentedTitleCell {
         }
 
         imageView.bounds = CGRect(x: 0, y: 0, width: myItemModel.imageSize.width, height: myItemModel.imageSize.height)
+        self.onTap = itemModel.onTapButton
 
         var normalImageInfo = myItemModel.normalImageInfo
         if myItemModel.isSelected && myItemModel.selectedImageInfo != nil {
